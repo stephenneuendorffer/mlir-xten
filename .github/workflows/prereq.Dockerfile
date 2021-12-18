@@ -23,6 +23,8 @@ RUN pyenv install 3.7.0
 RUN pyenv global 3.7.0
 RUN pyenv rehash
 
+RUN apt-get install clang-8 lld-8 git ninja-build --assume-yes
+
 # first install MLIR in llvm-project
 # RUN mkdir bin
 # ENV PATH=$PATH:/build/bin
