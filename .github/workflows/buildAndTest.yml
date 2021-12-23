@@ -12,7 +12,7 @@ jobs:
   # Build repo and run its tests.
   build-repo:
     name: Build and Test
-    runs-on: ghcr.io/stephenneuendorffer/mlir-xten-llvm:main
+    runs-on: ubuntu-latest
     steps:
       - name: Configure Environment
         run: echo "$GITHUB_WORKSPACE/llvm/install/bin" >> $GITHUB_PATH
@@ -24,6 +24,12 @@ jobs:
         with:
           fetch-depth: 2
           submodules: "true"
+
+      - name: Hello world action step
+        uses: ./.github/actions/build-with-llvm/ # Uses an action in the root directory
+        id: hello
+        with:
+          who-to-greet: 'Mona the Octocat'
 
       # We'll be running clang-tidy later in this flow.
       # - name: Install clang-tidy
@@ -80,22 +86,22 @@ jobs:
       # --------
 
       # Build the repo test target in debug mode to build and test.
-      - name: Build (Assert)
-        run: |
-          mkdir build_assert
-          cd build_assert
-          cmake .. \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DLLVM_ENABLE_ASSERTIONS=ON \
-            -DCMAKE_MODULE_PATH=`pwd`/../cmakeModules \
-            -DMLIR_DIR=../llvm/install/lib/cmake/mlir/ \
-            -DLLVM_DIR=../llvm/install/lib/cmake/llvm/ \
-            -DCMAKE_LINKER=lld \
-            -DCMAKE_C_COMPILER=clang \
-            -DCMAKE_CXX_COMPILER=clang++ \
-            -DLLVM_EXTERNAL_LIT=`pwd`/../llvm/build/bin/llvm-lit \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-          make -j$(nproc)
+      # - name: Build (Assert)
+      #   run: |
+      #     mkdir build_assert
+      #     cd build_assert
+      #     cmake .. \
+      #       -DCMAKE_BUILD_TYPE=Debug \
+      #       -DLLVM_ENABLE_ASSERTIONS=ON \
+      #       -DCMAKE_MODULE_PATH=`pwd`/../cmakeModules \
+      #       -DMLIR_DIR=/build/build/lib/cmake/mlir/ \
+      #       -DLLVM_DIR=/build/build/lib/cmake/llvm/ \
+      #       -DCMAKE_LINKER=lld \
+      #       -DCMAKE_C_COMPILER=clang \
+      #       -DCMAKE_CXX_COMPILER=clang++ \
+      #       -DLLVM_EXTERNAL_LIT=/build/build/bin/llvm-lit \
+      #       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      #     make -j$(nproc)
 
       # Build the repo test target in release mode to build and test.
       # - name: Build (Release)

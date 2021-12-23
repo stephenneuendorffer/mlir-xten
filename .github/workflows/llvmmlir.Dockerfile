@@ -1,4 +1,4 @@
-FROM ghcr.io/stephenneuendorffer/mlir-xten-base:main
+FROM ghcr.io/stephenneuendorffer/mlir-xten-base:main AS builder
 
 WORKDIR /build
 
@@ -12,5 +12,11 @@ RUN clone-llvm.sh
 COPY utils/build-llvm.sh bin/build-llvm.sh
 RUN chmod a+x bin/build-llvm.sh
 RUN build-llvm.sh
+
+# FROM ghcr.io/stephenneuendorffer/mlir-xten-base:main
+# WORKDIR /build
+# RUN mkdir install
+# COPY --from=builder /build/install install
+# COPY --from=builder /build/llvm llvm
 
 # RUN cmake --build . --target check-mlir

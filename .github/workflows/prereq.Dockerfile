@@ -11,19 +11,32 @@ RUN DEBIAN_FRONTEND=noninteractive \
         make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
         libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils \
         libffi-dev liblzma-dev
-RUN git clone git://github.com/yyuu/pyenv.git .pyenv
-RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
 
-ENV HOME=/build
-ENV PYENV_ROOT=$HOME/.pyenv
-ENV PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+# RUN git clone git://github.com/yyuu/pyenv.git .pyenv
+# RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
 
-RUN pyenv install 3.7.0
+# ENV HOME=/build
+# ENV PYENV_ROOT=$HOME/.pyenv
+# ENV PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
-RUN pyenv global 3.7.0
-RUN pyenv rehash
+# RUN pyenv install 3.7.0
+
+# RUN pyenv global 3.7.0
+# RUN pyenv rehash
+
+RUN apt-get install python3 python3-dev python3-pip --assume-yes
 
 RUN apt-get install clang-8 lld-8 git ninja-build --assume-yes
+
+RUN pip3 install pybind11 numpy
+
+RUN pip3 install --pre torch torchvision -f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
+#RUN pip3 install torch==1.10.1+cpu torchvision==0.11.2+cpu torchaudio==0.10.1+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+
+RUN curl -L https://github.com/Kitware/CMake/releases/download/v3.20.6/cmake-3.20.6-linux-x86_64.tar.gz > cmake.tgz
+RUN tar -xvf cmake.tgz
+RUN cp -r cmake*x86_64/bin/* /usr/bin
+RUN cp -r cmake*x86_64/share/* /usr/share
 
 # first install MLIR in llvm-project
 # RUN mkdir bin

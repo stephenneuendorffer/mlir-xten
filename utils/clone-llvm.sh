@@ -12,11 +12,12 @@
 #
 ##===----------------------------------------------------------------------===##
 
-export commithash=984e270a9a7063c370bcc80ee1fb3ec874d92b93
+export commithash=966b72098363d44a
+#984e270a9a7063c370bcc80ee1fb3ec874d92b93
 
-git clone --depth 1 https://github.com/llvm/llvm-project.git llvm
+git clone --depth 10000 https://github.com/llvm/llvm-project.git llvm
 pushd llvm
-git fetch --depth=1 origin $commithash
+#git fetch --depth=1 origin $commithash
 git checkout $commithash
 popd
 
